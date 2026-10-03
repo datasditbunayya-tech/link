@@ -1,0 +1,75 @@
+PANDUAN PASANG DI GITHUB (dari HP Android)
+Portal Admin SDS Bunayya Islamic School
+
+ISI FOLDER
+- index.html           : halaman utama
+- data.js              : DAFTAR LINK (ini yang sering diubah)
+- logo.png, icon-512.png : logo sekolah
+- manifest.webmanifest, sw.js : agar bisa dipasang seperti aplikasi
+
+LANGKAH 1. Siapkan file
+1. Ekstrak file ZIP dengan aplikasi Files (ketuk ZIP, pilih Ekstrak).
+2. Pastikan semua file ada di satu folder.
+
+LANGKAH 2. Buat repositori di GitHub
+1. Buka github.com di Chrome, masuk ke akun Anda.
+2. Ketuk tanda + lalu New repository.
+3. Nama: portal-bunayya (bebas). Pilih Public. Ketuk Create repository.
+
+LANGKAH 3. Unggah file
+1. Di repositori, ketuk "uploading an existing file".
+2. Pilih SEMUA file hasil ekstrak (bukan ZIP-nya).
+3. Ketuk Commit changes.
+
+LANGKAH 4. Aktifkan GitHub Pages
+1. Buka Settings > Pages.
+2. Source: Deploy from a branch. Branch: main, folder: / (root). Ketuk Save.
+3. Tunggu 1 sampai 3 menit. Alamat web muncul di halaman yang sama:
+   https://NAMA-GITHUB-ANDA.github.io/portal-bunayya/
+
+LANGKAH 5. Pasang di HP
+Buka alamat itu di Chrome. Menu titik tiga > Tambahkan ke layar utama.
+
+CARA MENGISI / MENGUBAH LINK
+Cara A (lewat menu Admin di halaman)
+1. Buka menu Admin (ikon gerigi). PIN awal: 1234.
+2. Isi link. Ketuk "Simpan di HP ini" untuk melihat hasilnya.
+3. Agar semua orang melihat: ketuk "Unduh data.js untuk GitHub".
+4. Di repositori GitHub: Add file > Upload files > pilih data.js baru > Commit.
+   (data.js lama otomatis tergantikan.)
+5. Tunggu 1 sampai 2 menit, lalu muat ulang halaman.
+
+Cara B (langsung di GitHub)
+Buka data.js di repositori, ketuk ikon pensil, ubah bagian "u" (alamat link),
+lalu Commit changes.
+
+CATATAN
+- Ganti PIN di menu Admin (bagian bawah) lalu unduh data.js dan unggah lagi.
+- PIN hanya pengaman ringan karena terlihat di data.js.
+- Jika perubahan tidak muncul, tutup dan buka lagi halaman, atau hapus data situs di Chrome.
+
+
+=====================================================
+MEMBUAT APLIKASI ANDROID (APK) DARI HALAMAN INI
+=====================================================
+Syarat: halaman sudah aktif di GitHub Pages (alamat https://...github.io/...).
+
+CARA 1. Pasang langsung (paling mudah, tanpa APK)
+Buka alamat web di Chrome > menu titik tiga > Pasang aplikasi / Tambahkan ke layar utama.
+Ikon Bunayya muncul di layar utama dan terbuka seperti aplikasi biasa.
+
+CARA 2. Buat file APK dengan PWABuilder (gratis)
+1. Buka pwabuilder.com di Chrome.
+2. Tempel alamat web GitHub Pages Anda, ketuk Start.
+3. Ketuk Package for stores > Android > Generate Package.
+4. Isi nama aplikasi "Admin Bunayya", lalu unduh paketnya.
+5. Pilih opsi APK (bukan AAB) lalu pasang di HP. Jika diminta, izinkan "Instal dari sumber tidak dikenal".
+6. Jika mau diunggah ke Google Play Store, butuh akun developer Google Play
+   (biaya sekali bayar sekitar 25 dolar AS) dan file AAB.
+
+CATATAN LINK
+- Link terkunci (keuangan): password awal Bunayya@123. Ubah di menu Admin.
+- Password hanya pengaman ringan. Alamat link tetap terlihat di data.js.
+  Pengaman yang kuat sebaiknya diatur di Google Apps Script masing-masing.
+- Link "Catatan Uang" memakai akun Google Workspace (admin.paud.belajar.id),
+  jadi hanya akun yang punya izin yang bisa membukanya.
