@@ -124,6 +124,23 @@ nav.bottom button[aria-current="page"]{color:var(--ink)}
 .lockb svg{width:12px;height:12px}
 .chk{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--muted)}
 .chk input{width:20px;height:20px;accent-color:var(--green)}
+.fab{position:fixed;z-index:25;right:max(16px,calc((100vw - 560px)/2 + 16px));bottom:calc(76px + env(safe-area-inset-bottom,0px));width:60px;height:60px;border-radius:50%;padding:0;background:#fff;border:3px solid #fff;box-shadow:0 0 0 3px rgba(39,179,74,.35),0 8px 22px rgba(0,0,0,.35);animation:pulse 2.4s ease-out infinite}
+.fab img{width:100%;height:100%;border-radius:50%;display:block}
+.fab[hidden],.fabtip[hidden]{display:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,200,20,.7),0 8px 22px rgba(0,0,0,.35)}70%{box-shadow:0 0 0 16px rgba(255,200,20,0),0 8px 22px rgba(0,0,0,.35)}100%{box-shadow:0 0 0 0 rgba(255,200,20,0),0 8px 22px rgba(0,0,0,.35)}}
+@media (prefers-reduced-motion:reduce){.fab{animation:none}}
+.fabtip{position:fixed;z-index:25;right:max(84px,calc((100vw - 560px)/2 + 84px));bottom:calc(90px + env(safe-area-inset-bottom,0px));background:var(--gold);color:var(--gold-ink);font-weight:700;font-size:13px;padding:8px 12px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.fabtip::after{content:"";position:absolute;right:-6px;top:50%;margin-top:-6px;border:6px solid transparent;border-left-color:var(--gold);border-right:0}
+.sheetbg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheetbg[hidden]{display:none}
+.sheet{width:100%;max-width:560px;background:var(--surface);color:var(--ink);border-radius:24px 24px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px));max-height:88%;overflow:auto}
+.sheet .top{display:flex;align-items:center;gap:12px}
+.sheet .top img{width:52px;height:52px;border-radius:14px}
+.sheet h2{margin:0;font-size:18px;font-weight:800;line-height:1.2}
+.sheet p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.sheet ol{margin:16px 0 4px;padding-left:20px;font-size:14px}
+.sheet li{margin:0 0 8px}
+.sheet .row{display:grid;gap:8px;margin-top:14px}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:#222;color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;opacity:0;pointer-events:none;transition:.2s;z-index:40;max-width:90%;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -153,6 +170,13 @@ nav.bottom button[aria-current="page"]{color:var(--ink)}
 </div>
 
 <nav class="bottom" aria-label="Menu utama"><div id="nav"></div></nav>
+<button class="fab" id="fab" aria-label="Unduh aplikasi Admin Bunayya ke HP" hidden><img src="logo.png" alt=""></button>
+<div class="fabtip" id="fabtip" hidden>Unduh aplikasi</div>
+<div class="sheetbg" id="sheetbg" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t">
+  <div class="top"><img src="logo.png" alt=""><div><h2 id="sheet-t">Unduh Aplikasi Admin Bunayya</h2><p>Pasang di HP agar terbuka seperti aplikasi biasa.</p></div></div>
+  <div id="sheetbody"></div>
+  <div class="row"><button class="btn" id="sheetclose">Tutup</button></div>
+</div></div>
 <div class="toast" id="toast" role="status"></div>
 
 <script src="data.js"></script>
@@ -163,6 +187,7 @@ function loadData(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'null')
 const DATA=loadData();
 const INFO=DATA.info, GROUPS=DATA.groups;
 const PIN=String(DATA.pin||BASE.pin||'1234');
+const APKURL=String(DATA.apkUrl||BASE.apkUrl||'');
 const LOCKPASS=String(DATA.lockPass||BASE.lockPass||'Bunayya@123');
 
 /* ============ KODE ============ */
@@ -283,7 +308,7 @@ async function enterAdmin(){
     try{sessionStorage.setItem('bunayya-admin','1')}catch(e){}
   }
   adminState='ok';
-  draft=JSON.parse(JSON.stringify({info:INFO,groups:GROUPS,pin:PIN,lockPass:LOCKPASS}));
+  draft=JSON.parse(JSON.stringify({info:INFO,groups:GROUPS,pin:PIN,lockPass:LOCKPASS,apkUrl:APKURL}));
   render();renderNav();
 }
 function adminHTML(){
@@ -306,7 +331,7 @@ function adminHTML(){
     h+=`<button class="btn add" data-act="addi" data-g="${gi}">+ Tambah link</button></section>`;
   });
   h+=`<div class="adm-bar"><button class="btn add" data-act="addg" style="margin-top:0">+ Tambah kategori</button></div>`;
-  h+=`<section class="adm-g"><label class="lbl" for="f-lock">Password link terkunci (keuangan)</label><input id="f-lock" class="fld" data-f="lockPass" value="${esc(draft.lockPass)}" autocomplete="off" style="margin-bottom:14px"><label class="lbl" for="f-pin">PIN admin</label><input id="f-pin" class="fld" data-f="pin" value="${esc(draft.pin)}" inputmode="numeric" autocomplete="off"><p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">PIN hanya pengaman ringan. Isinya terlihat di data.js, jadi jangan pakai PIN yang sama dengan akun penting.</p></section>`;
+  h+=`<section class="adm-g"><label class="lbl" for="f-apk">Link unduh file APK (boleh kosong)</label><input id="f-apk" class="fld" data-f="apkUrl" value="${esc(draft.apkUrl||'')}" placeholder="https://.../admin-bunayya.apk" inputmode="url" autocapitalize="none" style="margin-bottom:14px"><label class="lbl" for="f-lock">Password link terkunci (keuangan)</label><input id="f-lock" class="fld" data-f="lockPass" value="${esc(draft.lockPass)}" autocomplete="off" style="margin-bottom:14px"><label class="lbl" for="f-pin">PIN admin</label><input id="f-pin" class="fld" data-f="pin" value="${esc(draft.pin)}" inputmode="numeric" autocomplete="off"><p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">PIN hanya pengaman ringan. Isinya terlihat di data.js, jadi jangan pakai PIN yang sama dengan akun penting.</p></section>`;
   h+=bar+`<div class="adm-bar"><button class="btn gold" style="width:100%;height:48px" data-act="download">Unduh data.js untuk GitHub</button></div>`;
   h+=`<div class="adm-bar"><button class="btn red" style="width:100%" data-act="reset">Kembalikan ke data GitHub</button></div>`;
   return h;
@@ -330,6 +355,7 @@ document.addEventListener('input',e=>{
   else if(f==='gname')g.name=t.value;
   else if(f==='gico')g.ico=t.value;
   else if(f==='lockPass')draft.lockPass=t.value;
+  else if(f==='apkUrl')draft.apkUrl=t.value;
   else if(i)i[f]=(f==='locked')?t.checked:t.value;
 });
 function normUrl(u){u=(u||'').trim();if(!u)return '';if(!/^https?:\/\//i.test(u))u='https://'+u;return u}
@@ -341,6 +367,7 @@ function cleanDraft(){
   }));
   draft.pin=String(draft.pin||'').trim()||'1234';
   draft.lockPass=String(draft.lockPass||'').trim()||'Bunayya@123';
+  draft.apkUrl=normUrl(draft.apkUrl);
   if(bad.length){toast('Alamat tidak valid: '+bad[0]);return false}
   return true;
 }
@@ -365,6 +392,40 @@ try{
 document.getElementById('masehi').textContent=new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'numeric',month:'short',year:'numeric'}).format(new Date());
 document.getElementById('ticker').textContent=INFO;
 render();renderNav();
+
+/* ============ PASANG APLIKASI ============ */
+let deferredPrompt=null;
+const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const fab=document.getElementById('fab'),fabtip=document.getElementById('fabtip'),sheetbg=document.getElementById('sheetbg');
+if(!standalone()){
+  fab.hidden=false;
+  try{if(!sessionStorage.getItem('bunayya-tip')){fabtip.hidden=false;setTimeout(()=>{fabtip.hidden=true},6000);sessionStorage.setItem('bunayya-tip','1')}}catch(e){}
+}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e});
+window.addEventListener('appinstalled',()=>{fab.hidden=true;fabtip.hidden=true;toast('Aplikasi berhasil dipasang')});
+function openSheet(){
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  let h='';
+  if(ios) h+=`<ol><li>Buka halaman ini di <b>Safari</b>.</li><li>Ketuk tombol <b>Bagikan</b> (kotak dengan panah ke atas).</li><li>Pilih <b>Tambah ke Layar Utama</b>, lalu ketuk <b>Tambah</b>.</li></ol>`;
+  else h+=`<ol><li>Buka halaman ini di <b>Chrome</b>.</li><li>Ketuk menu <b>titik tiga</b> di pojok kanan atas.</li><li>Pilih <b>Pasang aplikasi</b> atau <b>Tambahkan ke layar utama</b>.</li><li>Ketuk <b>Pasang</b>. Ikon Bunayya muncul di layar utama.</li></ol>`;
+  h+=`<div class="row">`;
+  if(APKURL) h+=`<a class="btn pri" style="display:grid;place-items:center" href="${esc(APKURL)}" download>Unduh file APK</a>`;
+  h+=`</div>`;
+  document.getElementById('sheetbody').innerHTML=h;
+  sheetbg.hidden=false;document.getElementById('sheetclose').focus();
+}
+function closeSheet(){sheetbg.hidden=true;fab.focus()}
+fab.onclick=async()=>{
+  fabtip.hidden=true;
+  if(standalone()){toast('Aplikasi sudah terpasang');return}
+  if(deferredPrompt){
+    try{deferredPrompt.prompt();const r=await deferredPrompt.userChoice;deferredPrompt=null;if(r&&r.outcome==='accepted')toast('Memasang aplikasi…');else openSheet()}
+    catch(e){openSheet()}
+  } else openSheet();
+};
+document.getElementById('sheetclose').onclick=closeSheet;
+sheetbg.addEventListener('click',e=>{if(e.target===sheetbg)closeSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheetbg.hidden)closeSheet()});
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>

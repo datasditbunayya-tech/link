@@ -320,7 +320,8 @@ window.SITE_DATA = {
       ]
     }
   ],
-  "version": "2",
+  "version": "3",
   "pin": "1234",
-  "lockPass": "Bunayya@123"
+  "lockPass": "Bunayya@123",
+  "apkUrl": ""
 };
