@@ -326,8 +326,62 @@ window.SITE_DATA = {
       ]
     }
   ],
-  "version": "5",
+  "version": "6",
   "pin": "1234",
   "lockPass": "Bunayya@123",
-  "apkUrl": ""
+  "apkUrl": "",
+  "news": [
+    {
+      "cat": "Berita",
+      "title": "Selamat datang di portal SDS Bunayya Islamic School (contoh, silakan ganti)",
+      "date": "2026-10-10",
+      "img": "",
+      "u": "",
+      "body": "Ini contoh berita. Buka menu Admin untuk mengubah atau menghapusnya dan menambahkan berita sekolah."
+    }
+  ],
+  "agenda": [
+    {
+      "date": "2026-10-20",
+      "title": "Contoh agenda: Rapat guru (silakan ganti)",
+      "time": "08.00 - 10.00 WIB",
+      "place": "Ruang guru"
+    },
+    {
+      "date": "2026-10-27",
+      "title": "Contoh agenda: Kegiatan sekolah (silakan ganti)",
+      "time": "07.30 WIB",
+      "place": ""
+    }
+  ],
+  "ppdb": {
+    "label": "PENERIMAAN MURID BARU",
+    "title": "Pendaftaran Murid Baru",
+    "text": "Daftarkan putra-putri Anda di SDS Islam Terpadu Bunayya Islamic School.",
+    "url": "https://script.google.com/macros/s/AKfycbzTpCOQRwJeZ-yjXsOEv1owWrdnONhQP83RvOFQnTgw-NRvi6rvjZ5MJWHsR-R9RxAwZw/exec"
+  },
+  "infaq": {
+    "title": "Infaq & Donasi",
+    "text": "Salurkan infaq terbaik Anda untuk operasional pendidikan dan sarana sekolah.",
+    "bank": "",
+    "number": "",
+    "holder": "",
+    "wa": ""
+  },
+  "youtube": {
+    "title": "Video & Dokumentasi Kegiatan",
+    "text": "Kumpulan video kegiatan SDS Bunayya Islamic School.",
+    "channel": "",
+    "videos": []
+  },
+  "contact": {
+    "name": "SDS ISLAM TERPADU BUNAYYA",
+    "sub": "BUNAYYA ISLAMIC SCHOOL",
+    "about": "",
+    "address": "",
+    "phone": "",
+    "email": "",
+    "web": "https://www.bunayyaabata.com/",
+    "facebook": "https://www.facebook.com/bunayyaislamicschool"
+  }
 };
