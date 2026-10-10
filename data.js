@@ -16,19 +16,43 @@ window.SITE_DATA = {
           "n": "PPDB",
           "d": "Pendaftaran siswa baru",
           "u": "https://script.google.com/macros/s/AKfycbzTpCOQRwJeZ-yjXsOEv1owWrdnONhQP83RvOFQnTgw-NRvi6rvjZ5MJWHsR-R9RxAwZw/exec",
-          "locked": false
+          "locked": false,
+          "ico": "users"
         },
         {
           "n": "Portal Pendidikan",
           "d": "Website sekolah",
           "u": "https://www.bunayyaabata.com/",
-          "locked": false
+          "locked": false,
+          "ico": "globe"
         },
         {
           "n": "Facebook",
           "d": "Bunayya Islamic School",
           "u": "https://www.facebook.com/bunayyaislamicschool",
-          "locked": false
+          "locked": false,
+          "ico": "badge"
+        },
+        {
+          "n": "SPP SD-TK",
+          "d": "Pembayaran SPP SD & TK",
+          "u": "https://script.google.com/macros/s/AKfycbw50u7-jGYmKUdIAqBnIGLounVJpli69GcvmUsOsWlyPCDY-bmc2r2spmazliOl81GT/exec",
+          "locked": true,
+          "ico": "coin"
+        },
+        {
+          "n": "SPP TPQ",
+          "d": "Pembayaran SPP TPQ",
+          "u": "https://script.google.com/macros/s/AKfycbzP2_KxMGBG0gcStuJyV2gaiX5N1sSpMkmZVutv7TtMuqjLPXEhObai7v8EFcrZBbDVuQ/exec",
+          "locked": true,
+          "ico": "coin"
+        },
+        {
+          "n": "Catatan Uang",
+          "d": "Uang masuk & keluar",
+          "u": "https://script.google.com/a/macros/admin.paud.belajar.id/s/AKfycbz5RJO1676SfmkebR0GJJtzD3f1TTioXqNmhVm5Lfvq-AcS61fo-gTwQxc2ZfqBxudtSA/exec",
+          "locked": true,
+          "ico": "file"
         }
       ]
     },
@@ -88,24 +112,6 @@ window.SITE_DATA = {
       ],
       "ico": "coin",
       "items": [
-        {
-          "n": "SPP SD-TK",
-          "d": "Pembayaran SPP SD & TK",
-          "u": "https://script.google.com/macros/s/AKfycbw50u7-jGYmKUdIAqBnIGLounVJpli69GcvmUsOsWlyPCDY-bmc2r2spmazliOl81GT/exec",
-          "locked": true
-        },
-        {
-          "n": "SPP TPQ",
-          "d": "Pembayaran SPP TPQ",
-          "u": "https://script.google.com/macros/s/AKfycbzP2_KxMGBG0gcStuJyV2gaiX5N1sSpMkmZVutv7TtMuqjLPXEhObai7v8EFcrZBbDVuQ/exec",
-          "locked": true
-        },
-        {
-          "n": "Catatan Uang",
-          "d": "Uang masuk & keluar",
-          "u": "https://script.google.com/a/macros/admin.paud.belajar.id/s/AKfycbz5RJO1676SfmkebR0GJJtzD3f1TTioXqNmhVm5Lfvq-AcS61fo-gTwQxc2ZfqBxudtSA/exec",
-          "locked": true
-        },
         {
           "n": "ARKAS",
           "d": "Rencana & laporan BOS",
@@ -320,7 +326,7 @@ window.SITE_DATA = {
       ]
     }
   ],
-  "version": "3",
+  "version": "5",
   "pin": "1234",
   "lockPass": "Bunayya@123",
   "apkUrl": ""

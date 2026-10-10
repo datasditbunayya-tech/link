@@ -120,6 +120,29 @@ nav.bottom button[aria-current="page"]{color:var(--ink)}
 .btn.add{width:100%;margin-top:8px;border:1.5px dashed var(--line);background:none;color:var(--green)}
 .adm-bar{margin:14px 16px 0}
 .lbl{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin:0 0 6px}
+.secth{margin:24px 16px 6px;font-size:17px;font-weight:800}
+.secth::after{content:"";display:block;width:54px;height:3px;border-radius:2px;background:var(--green);margin-top:8px}
+.catrow{display:flex;align-items:center;gap:14px;width:calc(100% - 32px);margin:0 16px;padding:14px 2px;border-bottom:1px solid var(--line);text-align:left;font-weight:600;font-size:15.5px}
+.catrow .ci{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:none}
+.catrow .ci svg{width:20px;height:20px}
+.catrow .nm{flex:1;min-width:0}
+.catrow .cn{color:var(--muted);font-size:13px;font-weight:600}
+.catrow .ch{color:var(--gold);font-size:22px;line-height:1;font-weight:700}
+.cnt{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;margin-left:8px;border-radius:999px;background:rgba(127,127,127,.22);font-size:12px}
+.chip[aria-pressed="true"] .cnt{background:rgba(255,255,255,.25)}
+.card{display:flex;align-items:center;gap:8px;margin:0 16px 12px;border:1.5px solid var(--line);border-radius:20px;background:var(--surface);padding:12px}
+.card .lnk{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+.card:active{background:var(--surface2)}
+.cico{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;color:#fff;flex:none}
+.cico svg{width:26px;height:26px}
+.ctx{min-width:0;display:flex;flex-direction:column;gap:1px}
+.cat{font-size:11.5px;font-weight:800;letter-spacing:.6px;color:var(--green);text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.cat svg{width:12px;height:12px;color:var(--gold)}
+.ct{font-size:16px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.cd{font-size:12.5px;color:var(--muted);line-height:1.3}
+.card.empty .cico{filter:grayscale(1);opacity:.45}
+.card .star{position:static;flex:none;width:34px;height:34px}
+.lead{margin:12px 16px 0;color:var(--muted);font-size:13.5px}
 .lockb{position:absolute;top:-4px;left:calc(50% - 40px);width:22px;height:22px;border-radius:50%;background:var(--gold);color:var(--gold-ink);display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.4)}
 .lockb svg{width:12px;height:12px}
 .chk{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--muted)}
@@ -218,16 +241,21 @@ function tile(g,i){
   const k=key(g,i), on=favs.includes(k), ok=!!i.u;
   return `<div class="tile ${ok?'':'empty'}">
     <a class="lnk" ${!ok?`href="#" data-empty="1"`:i.locked?`href="#" data-lock="${esc(i.u)}"`:`href="${esc(i.u)}" target="_blank" rel="noopener"`} style="display:flex;flex-direction:column;align-items:center;width:100%">
-      <span class="ico" style="background:linear-gradient(145deg,${g.c[0]},${g.c[1]});--c1:${g.c[1]}">${svg(g.ico)}</span>${i.locked&&ok?`<span class="lockb" aria-label="Terkunci">${svg('lock')}</span>`:''}
+      <span class="ico" style="background:linear-gradient(145deg,${g.c[0]},${g.c[1]});--c1:${g.c[1]}">${svg(i.ico||g.ico)}</span>${i.locked&&ok?`<span class="lockb" aria-label="Terkunci">${svg('lock')}</span>`:''}
       <span class="n">${esc(i.n)}</span><span class="d">${ok?esc(i.d):'Belum diisi'}</span>
     </a>
     <button class="star" data-k="${esc(k)}" aria-pressed="${on}" aria-label="Favorit ${esc(i.n)}">${svg('star')}</button>
   </div>`;
 }
-function group(g,items){
-  if(!items.length) return '';
-  return `<section class="grp"><h3>${esc(g.name)} <small>${items.length} link</small></h3><div class="grid">${items.map(i=>tile(g,i)).join('')}</div></section>`;
+function card(g,i){
+  const k=key(g,i), on=favs.includes(k), ok=!!i.u;
+  const href=!ok?`href="#" data-empty="1"`:i.locked?`href="#" data-lock="${esc(i.u)}"`:`href="${esc(i.u)}" target="_blank" rel="noopener"`;
+  return `<div class="card ${ok?'':'empty'}"><a class="lnk" ${href}>
+    <span class="cico" style="background:linear-gradient(145deg,${g.c[0]},${g.c[1]})">${svg(i.ico||g.ico)}</span>
+    <span class="ctx"><span class="cat">${esc(g.name)}${i.locked&&ok?svg('lock'):''}</span><span class="ct">${esc(i.n)}</span><span class="cd">${ok?esc(i.d):'Belum diisi'}</span></span></a>
+    <button class="star" data-k="${esc(k)}" aria-pressed="${on}" aria-label="Favorit ${esc(i.n)}">${svg('star')}</button></div>`;
 }
+const listGroups=()=>GROUPS.filter(g=>g.id!=='unggulan');
 function render(){
   const m=document.getElementById('main'); let h='';
   const q=query.trim().toLowerCase();
@@ -236,30 +264,37 @@ function render(){
   if(view==='info'){
     const total=GROUPS.reduce((a,g)=>a+g.items.length,0), filled=GROUPS.reduce((a,g)=>a+g.items.filter(i=>i.u).length,0);
     h=`<div class="hero"><h2>Tentang portal ini</h2><p>Kumpulan link kerja admin SDS Bunayya Islamic School.</p><span class="stat">${filled} dari ${total} link sudah terisi</span></div>
-    <div class="note"><b>Cara mengisi link.</b> Buka menu <code>Admin</code> di bawah dan masukkan PIN. Isi link, lalu unduh data.js dan unggah ke GitHub agar semua orang melihatnya.<br><br><b>Pasang di HP.</b> Buka menu titik tiga di Chrome, pilih <code>Tambahkan ke layar utama</code>.<br><br><b>Favorit</b> tersimpan di browser HP ini saja.</div>`;
+    <div class="note"><b>Cara mengisi link.</b> Buka menu <code>Admin</code> di bawah dan masukkan PIN. Isi link, lalu unduh data.js dan unggah ke GitHub agar semua orang melihatnya.<br><br><b>Pasang di HP.</b> Ketuk tombol logo bulat di pojok kanan bawah, atau menu titik tiga di Chrome lalu <code>Tambahkan ke layar utama</code>.<br><br><b>Favorit</b> tersimpan di browser HP ini saja.</div>`;
   } else if(view==='fav'){
     const list=[]; GROUPS.forEach(g=>g.items.forEach(i=>{if(favs.includes(key(g,i))&&match(g,i))list.push([g,i])}));
-    h=list.length?`<section class="grp"><h3>Favorit Saya <small>${list.length} link</small></h3><div class="grid">${list.map(([g,i])=>tile(g,i)).join('')}</div></section>`
-      :`<div class="emptybox"><p><b>Belum ada favorit.</b><br>Ketuk bintang pada link di Beranda untuk menyimpannya di sini.</p></div>`;
+    h=list.length?`<div class="secth">Favorit Saya</div><div style="margin-top:12px">${list.map(([g,i])=>card(g,i)).join('')}</div>`
+      :`<div class="emptybox"><p><b>Belum ada favorit.</b><br>Ketuk bintang pada link untuk menyimpannya di sini.</p></div>`;
+  } else if(q){
+    const list=[];GROUPS.forEach(g=>g.items.forEach(i=>{if(match(g,i))list.push([g,i])}));
+    h=list.length?`<div class="secth">Hasil pencarian <span class="cnt">${list.length}</span></div><div style="margin-top:12px">${list.map(([g,i])=>card(g,i)).join('')}</div>`
+      :`<div class="emptybox"><p><b>Link tidak ditemukan.</b><br>Coba kata kunci lain.</p></div>`;
+  } else if(view==='kategori'){
+    const gs=listGroups(), total=gs.reduce((a,g)=>a+g.items.length,0);
+    h=`<div class="chips" role="group" aria-label="Filter kategori"><button class="chip" data-cat="all" aria-pressed="${cat==='all'}">Semua<span class="cnt">${total}</span></button>${gs.map(g=>`<button class="chip" data-cat="${g.id}" aria-pressed="${cat===g.id}">${esc(g.name)}<span class="cnt">${g.items.length}</span></button>`).join('')}</div><div style="margin-top:14px">`;
+    let n=0;gs.forEach(g=>{if(cat!=='all'&&g.id!==cat)return;g.items.forEach(i=>{n++;h+=card(g,i)})});
+    if(!n)h+=`<div class="emptybox"><p><b>Belum ada link di kategori ini.</b><br>Tambahkan lewat menu Admin.</p></div>`;
+    h+='</div>';
   } else {
     const filled=GROUPS.reduce((a,g)=>a+g.items.filter(i=>i.u).length,0);
-    if(!q&&cat==='all'){
-      h+=`<div class="hero"><h2>Semua pekerjaan admin, satu tempat</h2><p>Ketuk ikon untuk membuka layanan.</p><span class="stat">${filled} link aktif</span></div>`;
-      const fg=GROUPS.find(g=>g.id==='unggulan');
-      if(fg&&fg.items.length) h+=`<div class="panel"><h3>LINK UNGGULAN</h3><div class="grid" style="margin-top:14px">${fg.items.map(i=>tile(fg,i)).join('')}</div></div>`;
-      const fl=[];GROUPS.forEach(g=>g.items.forEach(i=>{if(favs.includes(key(g,i)))fl.push([g,i])}));
-      if(fl.length) h+=`<div class="panel"><h3>AKSES CEPAT</h3><div class="grid" style="margin-top:14px">${fl.slice(0,6).map(([g,i])=>tile(g,i)).join('')}</div></div>`;
-    }
-    h+=`<div class="chips" role="group" aria-label="Filter kategori"><button class="chip" data-cat="all" aria-pressed="${cat==='all'}">Semua</button>${GROUPS.map(g=>`<button class="chip" data-cat="${g.id}" aria-pressed="${cat===g.id}">${esc(g.name)}</button>`).join('')}</div>`;
-    let any=false;
-    GROUPS.forEach(g=>{ if(cat!=='all'&&g.id!==cat)return; if(g.id==='unggulan'&&cat==='all'&&!q)return; const it=g.items.filter(i=>match(g,i)); if(it.length){any=true;h+=group(g,it)} });
-    if(!any) h+=`<div class="emptybox"><p><b>Link tidak ditemukan.</b><br>Coba kata kunci lain atau pilih kategori Semua.</p></div>`;
+    h+=`<div class="hero"><h2>Semua pekerjaan admin, satu tempat</h2><p>Ketuk ikon untuk membuka layanan.</p><span class="stat">${filled} link aktif</span></div>`;
+    const fg=GROUPS.find(g=>g.id==='unggulan');
+    if(fg&&fg.items.length) h+=`<div class="panel"><h3>LINK UNGGULAN</h3><div class="grid" style="margin-top:14px">${fg.items.map(i=>tile(fg,i)).join('')}</div></div>`;
+    const fl=[];GROUPS.forEach(g=>g.items.forEach(i=>{if(favs.includes(key(g,i)))fl.push([g,i])}));
+    if(fl.length) h+=`<div class="panel"><h3>AKSES CEPAT</h3><div class="grid" style="margin-top:14px">${fl.slice(0,6).map(([g,i])=>tile(g,i)).join('')}</div></div>`;
+    h+=`<div class="secth">Kategori &amp; Layanan</div>`;
+    listGroups().forEach(g=>{h+=`<button class="catrow" data-open="${g.id}"><span class="ci" style="background:linear-gradient(145deg,${g.c[0]},${g.c[1]})">${svg(g.ico)}</span><span class="nm">${esc(g.name)}</span><span class="cn">${g.items.length} link</span><span class="ch" aria-hidden="true">›</span></button>`});
   }
   m.innerHTML=h;
 }
+
 function renderNav(){
-  const t=[['home','Beranda','home'],['admin','Admin','gear'],['fav','Favorit','star'],['info','Info','info']];
-  document.getElementById('nav').innerHTML=t.map(([v,l,ic])=>`<button data-v="${v}" ${view===v?'aria-current="page"':''}><span class="pill">${svg(ic)}</span>${l}</button>`).join('')+`<button data-v="cat" aria-label="Kategori"><span class="pill">${svg('grid')}</span>Kategori</button>`;
+  const t=[['home','Beranda','home'],['admin','Admin','gear'],['kategori','Kategori','grid'],['fav','Favorit','star'],['info','Info','info']];
+  document.getElementById('nav').innerHTML=t.map(([v,l,ic])=>`<button data-v="${v}" ${view===v?'aria-current="page"':''}><span class="pill">${svg(ic)}</span>${l}</button>`).join('');
 }
 function askLock(url){
   let ok=false;try{ok=sessionStorage.getItem('bunayya-unlock')==='1'}catch(e){}
@@ -278,6 +313,7 @@ document.addEventListener('click',e=>{
   const s=e.target.closest('.star'); if(s){const k=s.dataset.k;const i=favs.indexOf(k);if(i>-1){favs.splice(i,1);toast('Dihapus dari favorit')}else{favs.push(k);toast('Disimpan di favorit')}saveFavs();const y=scrollY;render();scrollTo(0,y);return}
   const lk=e.target.closest('a[data-lock]'); if(lk){e.preventDefault();askLock(lk.dataset.lock);return}
   const l=e.target.closest('a[data-empty]'); if(l){e.preventDefault();toast('Link ini belum diisi');return}
+  const cr=e.target.closest('.catrow'); if(cr){view='kategori';cat=cr.dataset.open;render();renderNav();scrollTo({top:0});return}
   const c=e.target.closest('.chip'); if(c){cat=c.dataset.cat;render();return}
   const n=e.target.closest('#nav button'); if(n){
     if(n.dataset.v==='cat'){view='home';cat=cat==='all'?GROUPS[0].id:'all';render();renderNav();scrollTo({top:0});return}
@@ -286,7 +322,7 @@ document.addEventListener('click',e=>{
   }
 });
 document.getElementById('sbtn').onclick=()=>{const s=document.getElementById('search');s.classList.toggle('on');if(s.classList.contains('on'))document.getElementById('q').focus();else{query='';document.getElementById('q').value='';render()}};
-document.getElementById('q').oninput=e=>{query=e.target.value;if(view!=='home'&&view!=='fav'){view='home';renderNav()}render()};
+document.getElementById('q').oninput=e=>{query=e.target.value;if(view==='info'||view==='admin'){view='home';renderNav()}render()};
 document.getElementById('tbtn').onclick=()=>{
   const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
   r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('bunayya-theme',r.dataset.theme)}catch(e){}
