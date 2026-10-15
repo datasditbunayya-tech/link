@@ -326,9 +326,9 @@ window.SITE_DATA = {
       ]
     }
   ],
-  "version": "6",
-  "pin": "1234",
-  "lockPass": "Bunayya@123",
+  "version": "7",
+  "pin": "Bunayya@88",
+  "lockPass": "Bunayya@88",
   "apkUrl": "",
   "news": [
     {

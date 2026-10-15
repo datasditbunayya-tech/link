@@ -284,15 +284,15 @@ nav.bottom button[aria-current="page"]{color:var(--ink)}
 
 <script src="data.js"></script>
 <script>
-const BASE=window.SITE_DATA||{info:'',groups:[],version:'0',pin:'1234'};
+const BASE=window.SITE_DATA||{info:'',groups:[],version:'0',pin:'Bunayya@88'};
 const LS_KEY='bunayya-data-v1';
 function loadData(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(o&&o.base===BASE.version&&o.data)return o.data}catch(e){}return BASE}
 const DATA=loadData();
 const INFO=DATA.info, GROUPS=DATA.groups;
-const PIN=String(DATA.pin||BASE.pin||'1234');
+const PIN=String(DATA.pin||BASE.pin||'Bunayya@88');
 const APKURL=String(DATA.apkUrl||BASE.apkUrl||'');
 const NEWS=DATA.news||[],AGENDA=DATA.agenda||[],PPDB=DATA.ppdb||{},INFAQ=DATA.infaq||{},YT=DATA.youtube||{videos:[]},CONTACT=DATA.contact||{};
-const LOCKPASS=String(DATA.lockPass||BASE.lockPass||'Bunayya@123');
+const LOCKPASS=String(DATA.lockPass||BASE.lockPass||'Bunayya@88');
 
 /* ============ KODE ============ */
 const ICONS={
@@ -608,8 +608,8 @@ function cleanDraft(){
   if(draft.youtube){draft.youtube.channel=normUrl(draft.youtube.channel);(draft.youtube.videos||[]).forEach(v=>v.u=normUrl(v.u))}
   if(draft.contact){draft.contact.web=normUrl(draft.contact.web);draft.contact.facebook=normUrl(draft.contact.facebook)}
   if(draft.infaq)draft.infaq.wa=String(draft.infaq.wa||'').replace(/\D/g,'');
-  draft.pin=String(draft.pin||'').trim()||'1234';
-  draft.lockPass=String(draft.lockPass||'').trim()||'Bunayya@123';
+  draft.pin=String(draft.pin||'').trim()||'Bunayya@88';
+  draft.lockPass=String(draft.lockPass||'').trim()||'Bunayya@88';
   draft.apkUrl=normUrl(draft.apkUrl);
   if(bad.length){toast('Alamat tidak valid: '+bad[0]);return false}
   return true;
